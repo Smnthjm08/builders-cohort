@@ -3,9 +3,15 @@
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
+    "@solana/spl-token": "^0.4.15",
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@solana-program/system": "^0.16.0",
+    "@solana-program/token": "^0.18.0",
+    "@solana/kit": "^8.6.0"
   }
 }

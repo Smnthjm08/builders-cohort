@@ -1,1 +1,7 @@
-console.log("Hello via Bun!");
+import { createSolanaRpc, createSolanaRpcSubscriptions } from "@solana/kit";
+
+export const rpc = createSolanaRpc("https://api.devnet.solana.com");
+
+export const rpcSubscription = createSolanaRpcSubscriptions(
+  "wss://api.devnet.solana.com",
+);

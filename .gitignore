@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 wallet*.json
 *.keypair.json
+
+
+rec-wallet.json

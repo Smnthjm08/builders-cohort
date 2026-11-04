@@ -1,7 +1,11 @@
-import { createSolanaRpc, createSolanaRpcSubscriptions } from "@solana/kit";
+import { mplCore } from "@metaplex-foundation/mpl-core";
+import { createSignerFromKeypair, keypairIdentity } from "@metaplex-foundation/umi";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 
-export const rpc = createSolanaRpc("https://api.devnet.solana.com");
+export const umi = createUmi("https://api.devnet.solana.com").use(mplCore());
 
-export const rpcSubscription = createSolanaRpcSubscriptions(
-  "wss://api.devnet.solana.com",
-);
+const secret = Uint8Array.from(await Bun.file("wallet.json").json());
+const signer = createSignerFromKeypair(umi, umi.eddsa.createKeypairFromSecretKey(secret));
+umi.use(keypairIdentity(signer));
+
+if (import.meta.main) console.log("identity:", umi.identity.publicKey);

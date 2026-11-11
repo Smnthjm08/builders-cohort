@@ -18,4 +18,16 @@ pub mod escrow_program {
     pub fn make(ctx: Context<Make>, seed: u64, deposit: u64, receive: u64) -> Result<()> {
         crate::instructions::make::handle_make(ctx, seed, deposit, receive)
     }
+
+    pub fn take(ctx: Context<Take>) -> Result<()> {
+        crate::instructions::take::handle_take(ctx)
+    }
+
+    pub fn refund(ctx: Context<Refund>) -> Result<()> {
+        crate::instructions::refund::handle_refund(ctx)
+    }
+
+    pub fn update(ctx: Context<Update>, receive: u64) -> Result<()> {
+        crate::instructions::update::handle_update(ctx, receive)
+    }
 }

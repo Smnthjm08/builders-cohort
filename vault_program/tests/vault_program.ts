@@ -14,11 +14,11 @@ describe("vault_program", () => {
 
   const [vaultState, stateBump] = PublicKey.findProgramAddressSync(
     [Buffer.from("state"), user.toBuffer()],
-    program.programId
+    program.programId,
   );
   const [vault, vaultBump] = PublicKey.findProgramAddressSync(
     [Buffer.from("vault"), vaultState.toBuffer()],
-    program.programId
+    program.programId,
   );
 
   it("initializes the vault", async () => {
@@ -57,7 +57,7 @@ describe("vault_program", () => {
       expect.fail("deposit of 0 should have failed");
     } catch (err) {
       expect((err as anchor.AnchorError).error.errorCode.code).to.equal(
-        "InvalidAmount"
+        "InvalidAmount",
       );
     }
   });
@@ -84,7 +84,7 @@ describe("vault_program", () => {
       expect.fail("withdraw should have failed");
     } catch (err) {
       expect((err as anchor.AnchorError).error.errorCode.code).to.equal(
-        "InsufficientFunds"
+        "InsufficientFunds",
       );
     }
   });
@@ -98,5 +98,34 @@ describe("vault_program", () => {
     // Both accounts are gone from the chain.
     expect(await provider.connection.getAccountInfo(vault)).to.be.null;
     expect(await provider.connection.getAccountInfo(vaultState)).to.be.null;
+  });
+
+  it("another wallet can't withdraw SOL", async () => {
+    const attacker = anchor.web3.Keypair.generate();
+
+    await program.methods
+      .initialize()
+      .accountsPartial({ user, vaultState, vault })
+      .rpc();
+
+    const amount = 1 * anchor.web3.LAMPORTS_PER_SOL;
+
+    await program.methods
+      .deposit(new anchor.BN(amount))
+      .accountsPartial({ user, vaultState, vault })
+      .rpc();
+
+    try {
+      await program.methods
+        .withdraw(new anchor.BN(amount))
+        .accountsPartial({ user: attacker.publicKey, vaultState, vault })
+        .signers([attacker])
+        .rpc();
+      expect.fail("attacker should not be able to withdraw");
+    } catch (err) {
+      expect((err as anchor.AnchorError).error.errorCode.code).to.equal(
+        "ConstraintSeeds",
+      );
+    }
   });
 });

@@ -19,7 +19,7 @@ pub mod vault_program {
         crate::instructions::initialize::handle_initialize(ctx)
     }
 
-    pub fn increment(ctx: Context<Increment>) -> Result<()> {
-        crate::instructions::increment::handle_increment(ctx)
+    pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
+        crate::instructions::deposit::handle_deposit(ctx, amount)
     }
 }

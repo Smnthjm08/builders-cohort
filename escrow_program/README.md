@@ -55,6 +55,8 @@ Anchor's built-in constraint errors cover the rest, such as a non-maker trying t
 | `update`    | zero receive     | rejected                                                           |
 | `update`    | then take        | `take` charges the updated amount                                  |
 
+![anchor test output: 12 passing](test-results.png)
+
 ## Run it
 
 Requires the Solana CLI, Anchor 1.1.2 and Bun.

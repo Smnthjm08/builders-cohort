@@ -48,6 +48,8 @@ The vault has no data, so it can't sign for itself. When SOL leaves the vault, t
 | close          | both `vault` and `vault_state` are gone from the chain                                      |
 | another wallet | a second wallet can't withdraw from the first wallet's vault (fails with `ConstraintSeeds`) |
 
+![anchor test output: 7 passing](test-results.png)
+
 ## Run it
 
 Requires the Solana CLI, Anchor 1.1.2 and Bun.

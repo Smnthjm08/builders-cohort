@@ -4,4 +4,7 @@ use anchor_lang::prelude::*;
 pub enum ErrorCode {
     #[msg("Amount must be greater than zero")]
     InvalidAmount,
+    
+    #[msg("Vault does not have enough funds")]
+    InsufficientFunds,
 }

@@ -26,7 +26,6 @@ pub struct Deposit<'info> {
 pub fn handle_deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
     require!(amount > 0, ErrorCode::InvalidAmount);
 
-    // The user signed the transaction, so a plain CPI (no PDA signer) is enough.
     let cpi_accounts = anchor_lang::system_program::Transfer {
         from: ctx.accounts.user.to_account_info(),
         to: ctx.accounts.vault.to_account_info(),

@@ -61,4 +61,42 @@ describe("vault_program", () => {
       );
     }
   });
+
+  it("withdraws sol from vault", async () => {
+    const amount = 0.5 * anchor.web3.LAMPORTS_PER_SOL;
+    const before = await provider.connection.getBalance(vault);
+
+    await program.methods
+      .withdraw(new anchor.BN(amount))
+      .accountsPartial({ user, vaultState, vault })
+      .rpc();
+
+    const after = await provider.connection.getBalance(vault);
+    expect(before - after).to.equal(amount);
+  });
+
+  it("rejects withdrawing more tgan vault", async () => {
+    try {
+      await program.methods
+        .withdraw(new anchor.BN(10 * anchor.web3.LAMPORTS_PER_SOL))
+        .accountsPartial({ user, vaultState, vault })
+        .rpc();
+      expect.fail("withdraw should have failed");
+    } catch (err) {
+      expect((err as anchor.AnchorError).error.errorCode.code).to.equal(
+        "InsufficientFunds"
+      );
+    }
+  });
+
+  it("closes the vault and returns all SOL", async () => {
+    await program.methods
+      .close()
+      .accountsPartial({ user, vaultState, vault })
+      .rpc();
+
+    // Both accounts are gone from the chain.
+    expect(await provider.connection.getAccountInfo(vault)).to.be.null;
+    expect(await provider.connection.getAccountInfo(vaultState)).to.be.null;
+  });
 });

@@ -22,4 +22,12 @@ pub mod vault_program {
     pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         crate::instructions::deposit::handle_deposit(ctx, amount)
     }
+
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+        crate::instructions::withdraw::handle_withdraw(ctx, amount)
+    }
+
+    pub fn close(ctx: Context<Close>) -> Result<()> {
+        crate::instructions::close::handle_close(ctx)
+    }
 }
